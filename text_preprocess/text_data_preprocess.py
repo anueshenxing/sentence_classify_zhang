@@ -42,7 +42,7 @@ if __name__ == '__main__':
     news = db.news_collection
     all_news = news.find()
     count = 0
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classification/data_file/"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
     yuliao_20170111_dir = pre_dir + "yuliao_20170111.txt"
     stopwords_file_dir = pre_dir + "stopwords_csdn_shijieba2009.txt"
     news_title_data_and_category_dir = pre_dir + "news_title_data_and_category.txt"

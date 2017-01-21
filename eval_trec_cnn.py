@@ -61,8 +61,8 @@ def prepare_data(seqs_x, max_len, n_words, filter_h):
     return x
 
 def train_classifier(train, valid, test, W, n_words=10000, img_w=100, max_len=40,
-    feature_maps=100, filter_hs=[3,4,5], dropout_val=0.5, patience=10, 
-    max_epochs=20, lrate=0.0002, batch_size=50, valid_batch_size=50, dispFreq=10, 
+    feature_maps=100, filter_hs=[1,2,3], dropout_val=0.5, patience=10,
+    max_epochs=20, lrate=0.0002, batch_size=50, valid_batch_size=50, dispFreq=10,
     validFreq=100, saveFreq=200, saveto = 'trec_cnn_result.npz'):
         
     """ train, valid, test : datasets
@@ -276,7 +276,7 @@ if __name__ == '__main__':
     logger.addHandler(fh)
     
     logger.info('loading data...')
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classification/data_file/"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
     train_test_data_dir = pre_dir + "train_test_data.p"
     all_news_word_tf_idf_and_others_dir = pre_dir + "all_news_word_tf_idf_and_others.p"
     word_vec_dict_dir = pre_dir + "word_vec_dict.p"

@@ -7,8 +7,8 @@ from pymongo import *
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
-pre_dir_1 = "/home/zhang/PycharmProjects/sentence_classification/data_file/"
-pre_dir = "/home/zhang/PycharmProjects/sentence_classification/data_file/20170111/"
+pre_dir_1 = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
+pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/20170111/"
 all_news_word_tf_idf_and_others_dir = pre_dir + "all_news_word_tf_idf_and_others_2017011.p"
 word_vec_dict_dir = pre_dir_1 + "word_vec_dict.p"
 

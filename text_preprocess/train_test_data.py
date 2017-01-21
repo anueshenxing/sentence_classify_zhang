@@ -24,7 +24,7 @@ def prepare_labels(labels):
     return idxlabels
 
 if __name__ == "__main__":
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classification/data_file/"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
     news_title_data_and_category_dir = pre_dir + "news_title_data_and_category.txt"
     all_news_word_tf_idf_and_others_dir = pre_dir + "all_news_word_tf_idf_and_others.p"
 

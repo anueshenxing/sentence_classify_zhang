@@ -5,7 +5,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-pre_dir = "/home/zhang/PycharmProjects/sentence_classification/data_file/"
+pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
 word_flag_vocab_dir = pre_dir + "word_flag_vocab.p"
 
 word_flag_vocab = cPickle.load(open(word_flag_vocab_dir, "rb"))

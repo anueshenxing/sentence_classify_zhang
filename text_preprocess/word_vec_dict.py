@@ -10,7 +10,7 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 if __name__=="__main__":
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classification/data_file/"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
     all_news_word_tf_idf_and_others_dir = pre_dir + "all_news_word_tf_idf_and_others.p"
     w2v_file_dir = pre_dir + "yuliao_20170111_100.bin"
 

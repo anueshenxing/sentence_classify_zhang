@@ -11,7 +11,7 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 if __name__=="__main__":
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classification/data_file/"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
     yuliao_20170111_dir = pre_dir + "yuliao_20170111.txt"
     news_content_fenci_data_dir = pre_dir + "news_content_fenci_data.txt"
     count = 0
