@@ -24,15 +24,15 @@ def prepare_labels(labels):
     return idxlabels
 
 if __name__ == "__main__":
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file_2017/"
     news_title_data_and_category_dir = pre_dir + "news_title_data_and_category.txt"
-    all_news_word_tf_idf_and_others_dir = pre_dir + "all_news_word_tf_idf_and_others.p"
+    wordtoix_and_ixtoword_dir = pre_dir + "wordtoix_and_ixtoword.p"
 
     news_title_data_and_category = open(news_title_data_and_category_dir, 'rb')
-    all_news_word_tf_idf_and_others = cPickle.load(open(all_news_word_tf_idf_and_others_dir, "rb"))
-    wordtoix = all_news_word_tf_idf_and_others[0]
+    wordtoix_and_ixtoword = cPickle.load(open(wordtoix_and_ixtoword_dir, "rb"))
+    wordtoix = wordtoix_and_ixtoword[0]
     # print wordtoix
-    del all_news_word_tf_idf_and_others
+    del wordtoix_and_ixtoword
     news_title_category = []
     title = []
     label = []

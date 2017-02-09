@@ -276,23 +276,23 @@ if __name__ == '__main__':
     logger.addHandler(fh)
     
     logger.info('loading data...')
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file_2017/"
     train_test_data_dir = pre_dir + "train_test_data.p"
-    all_news_word_tf_idf_and_others_dir = pre_dir + "all_news_word_tf_idf_and_others.p"
+    wordtoix_and_ixtoword_dir = pre_dir + "wordtoix_and_ixtoword.p"
     word_vec_dict_dir = pre_dir + "word_vec_dict.p"
 
     train_test_data = cPickle.load(open(train_test_data_dir, "rb"))
-    all_news_word_tf_idf_and_others = cPickle.load(open(all_news_word_tf_idf_and_others_dir, "rb"))
+    wordtoix_and_ixtoword = cPickle.load(open(wordtoix_and_ixtoword_dir, "rb"))
     word_vec_dict = cPickle.load(open(word_vec_dict_dir, "rb"))
 
     train, test = train_test_data[0], train_test_data[1]
     W = word_vec_dict[0]
-    wordtoix, ixtoword = all_news_word_tf_idf_and_others[0], all_news_word_tf_idf_and_others[1]
+    wordtoix, ixtoword = wordtoix_and_ixtoword[0], wordtoix_and_ixtoword[1]
 
     # x = cPickle.load(open("./data/trec.p","rb"))
     # train, test, W, ixtoword, wordtoix= x[0], x[1], x[2], x[3], x[4]
     # del x
-    del train_test_data, all_news_word_tf_idf_and_others, word_vec_dict
+    del train_test_data, wordtoix_and_ixtoword, word_vec_dict
     
     n_words = W.shape[0]
     
@@ -310,13 +310,13 @@ if __name__ == '__main__':
     ixtoword[n_words] = '<pad_zero>'
     wordtoix['<pad_zero>'] = n_words
     n_words = n_words + 1
-    Wemb = np.zeros((n_words,100))
+    Wemb = np.zeros((n_words, 100))
     Wemb[:n_words-1] = W
     del W
     
     results = []
     # run the cnn classifier ten times
-    r = range(0,1)
+    r = range(0, 1)
     for i in r:
         train0, valid = create_valid(train, valid_portion=0.10)
         [train_err, valid_err, test_err] = train_classifier(train0, valid, test, 

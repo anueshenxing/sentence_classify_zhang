@@ -40,7 +40,7 @@ if __name__ == '__main__':
     client = MongoClient("localhost", 27017)
     db = client.news_db
     news = db.news_collection
-    all_news = news.find()
+    all_news = news.find(no_cursor_timeout=True)
     count = 0
     pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file_2017/"
     yuliao_20170208_dir = pre_dir + "yuliao_20170208.txt"
@@ -89,4 +89,5 @@ if __name__ == '__main__':
         news_title_data_and_category.write(ctg_title_txt)
         yuliao_20170208.write(one_news_text)
         news_content_fenci_data.write(content_txt)
+    all_news.close()
     cPickle.dump([word_flag_vocab], open(pre_dir + "word_flag_vocab.p", "wb"))
