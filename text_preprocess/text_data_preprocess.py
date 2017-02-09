@@ -1,6 +1,6 @@
 # encoding=utf-8
 """
-    生成 词向量训练语料：yuliao_20170111
+    生成 词向量训练语料：yuliao_20170208
         词-词性对照表：word_flag_vocab
         新闻标题-类别数据集：news_title_data_and_category
         新闻内容分词结果：news_content_fenci_data
@@ -42,13 +42,13 @@ if __name__ == '__main__':
     news = db.news_collection
     all_news = news.find()
     count = 0
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
-    yuliao_20170111_dir = pre_dir + "yuliao_20170111.txt"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file_2017/"
+    yuliao_20170208_dir = pre_dir + "yuliao_20170208.txt"
     stopwords_file_dir = pre_dir + "stopwords_csdn_shijieba2009.txt"
     news_title_data_and_category_dir = pre_dir + "news_title_data_and_category.txt"
     news_content_fenci_data_dir = pre_dir + "news_content_fenci_data.txt"
 
-    yuliao_20170111 = open(yuliao_20170111_dir, "a")
+    yuliao_20170208 = open(yuliao_20170208_dir, "a")
     news_title_data_and_category = open(news_title_data_and_category_dir, "a")
     news_content_fenci_data = open(news_content_fenci_data_dir, "a")
     stopwords = stopwords(stopwords_file_dir)
@@ -68,14 +68,14 @@ if __name__ == '__main__':
         result = []
         for word, flag in jieba_fenci(news_title):
             if word not in stopwords:
-                word_flag_vocab[word] = flag
+                word_flag_vocab[word.encode("utf-8")] = flag
                 title.append(word)
                 result.append(word)
                 # print word
 
         for word, flag in jieba_fenci(news_content):
             if word not in stopwords:
-                word_flag_vocab[word] = flag
+                word_flag_vocab[word.encode("utf-8")] = flag
                 result.append(word)
                 content.append(word)
                 # print word
@@ -87,6 +87,6 @@ if __name__ == '__main__':
         one_news_text = one_news_text.encode("utf-8")
         content_txt = content_txt.encode("utf-8")
         news_title_data_and_category.write(ctg_title_txt)
-        yuliao_20170111.write(one_news_text)
+        yuliao_20170208.write(one_news_text)
         news_content_fenci_data.write(content_txt)
     cPickle.dump([word_flag_vocab], open(pre_dir + "word_flag_vocab.p", "wb"))

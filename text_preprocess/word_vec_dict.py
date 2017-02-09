@@ -10,9 +10,9 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 if __name__=="__main__":
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file_2017/"
     all_news_word_tf_idf_and_others_dir = pre_dir + "all_news_word_tf_idf_and_others.p"
-    w2v_file_dir = pre_dir + "yuliao_20170111_100.bin"
+    w2v_file_dir = pre_dir + "yuliao_20170208_100.bin"
 
     all_news_word_tf_idf_and_others = cPickle.load(open(all_news_word_tf_idf_and_others_dir, "rb"))
     wordtoix, ixtoword = all_news_word_tf_idf_and_others[0], all_news_word_tf_idf_and_others[1]

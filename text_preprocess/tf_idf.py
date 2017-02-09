@@ -11,11 +11,11 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 if __name__=="__main__":
-    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file/"
-    yuliao_20170111_dir = pre_dir + "yuliao_20170111.txt"
+    pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file_2017/"
+    yuliao_20170208_dir = pre_dir + "yuliao_20170208.txt"
     news_content_fenci_data_dir = pre_dir + "news_content_fenci_data.txt"
     count = 0
-    news_title_and_content_data = open(yuliao_20170111_dir, 'rb')
+    news_title_and_content_data = open(yuliao_20170208_dir, 'rb')
     news_content_fenci_data = open(news_content_fenci_data_dir, 'rb')
 
     all_news_title_and_content = [] #保存所有新闻的标题和内容，都经过分词、去停用词
