@@ -28,7 +28,7 @@ if __name__=="__main__":
 
     print time.asctime(time.localtime(time.time()))
 
-    cPickle.dump([W], open(pre_dir + "word_vec_dict.p", "wb"))
+    cPickle.dump([W], open(pre_dir + "word_vec_dict_true.p", "wb"), True)
 
     print time.asctime(time.localtime(time.time()))
 

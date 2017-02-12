@@ -75,9 +75,9 @@ if __name__=="__main__":
     # cPickle.dump([wordtoix, ixtoword, all_news_content, all_news_content_by_id, all_news_word_tf_idf],
     #              open(pre_dir + "all_news_word_tf_idf_and_others.p", "wb"))
     cPickle.dump([wordtoix, ixtoword],
-                 open(pre_dir + "wordtoix_and_ixtoword.p", "wb"))
+                 open(pre_dir + "wordtoix_and_ixtoword_true.p", "wb"), True)
     cPickle.dump([all_news_content_by_id],
-                 open(pre_dir + "all_news_content_by_id.p", "wb"))
+                 open(pre_dir + "all_news_content_by_id_true.p", "wb"), True)
     cPickle.dump([all_news_word_tf_idf],
-                 open(pre_dir + "all_news_word_tf_idf.p", "wb"))
+                 open(pre_dir + "all_news_word_tf_idf_true.p", "wb"), True)
     print time.asctime(time.localtime(time.time()))

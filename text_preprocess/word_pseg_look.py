@@ -8,9 +8,9 @@ sys.setdefaultencoding("utf-8")
 
 pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file_2017/"
 word_flag_vocab_dir = pre_dir + "word_flag_vocab.p"
-wordtoix_and_ixtoword_dir = pre_dir + "wordtoix_and_ixtoword.p"
-all_news_word_tf_idf_dir = pre_dir + "all_news_word_tf_idf.p"
-word_vec_dict_dir = pre_dir + "word_vec_dict.p"
+wordtoix_and_ixtoword_dir = pre_dir + "wordtoix_and_ixtoword_true.p"
+all_news_word_tf_idf_dir = pre_dir + "all_news_word_tf_idf_true.p"
+word_vec_dict_dir = pre_dir + "word_vec_dict_true.p"
 
 print time.asctime(time.localtime(time.time()))
 
@@ -24,7 +24,7 @@ wordtoix, ixtoword = wordtoix_and_ixtoword[0], wordtoix_and_ixtoword[1]
 all_news_word_tf_idf = all_news_word_tf_idf[0]
 word_vec = word_vec_dict[0]
 
-del word_flag_vocab, wordtoix_and_ixtoword, all_news_word_tf_idf, word_vec_dict
+# del word_flag_vocab, wordtoix_and_ixtoword, all_news_word_tf_idf, word_vec_dict
 
 print time.asctime(time.localtime(time.time()))
 
