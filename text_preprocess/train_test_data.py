@@ -25,30 +25,33 @@ def prepare_labels(labels):
 
 if __name__ == "__main__":
     pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file_2017/"
-    news_title_data_and_category_dir = pre_dir + "news_title_data_and_category.txt"
-    wordtoix_and_ixtoword_dir = pre_dir + "wordtoix_and_ixtoword.p"
+    # news_title_data_and_category_dir = pre_dir + "news_title_data_and_category.txt"
+    all_news_title_and_ctg_with_keywords_dir = pre_dir + "all_news_title_and_ctg_with_keywords.txt"
+    wordtoix_and_ixtoword_dir = pre_dir + "wordtoix_and_ixtoword_true.p"
 
-    news_title_data_and_category = open(news_title_data_and_category_dir, 'rb')
+    # news_title_data_and_category = open(news_title_data_and_category_dir, 'rb')
+    all_news_title_and_ctg_with_keywords = open(all_news_title_and_ctg_with_keywords_dir, 'rb')
     wordtoix_and_ixtoword = cPickle.load(open(wordtoix_and_ixtoword_dir, "rb"))
     wordtoix = wordtoix_and_ixtoword[0]
     # print wordtoix
     del wordtoix_and_ixtoword
-    news_title_category = []
+    # news_title_category = []
+    news_title_category_with_keywords = []
     title = []
     label = []
     train = []
     test = []
     train_label = []
     test_label = []
-    for sent in news_title_data_and_category:
-        news_title_category.append(sent)
+    for sent in all_news_title_and_ctg_with_keywords:
+        news_title_category_with_keywords.append(sent)
 
-    del news_title_data_and_category
+    del all_news_title_and_ctg_with_keywords
 
-    random.shuffle(news_title_category)
-    for i in range(len(news_title_category)):
+    random.shuffle(news_title_category_with_keywords)
+    for i in range(len(news_title_category_with_keywords)):
         sent_by_id = []
-        sent = news_title_category[i]
+        sent = news_title_category_with_keywords[i]
         word_list = sent.split()
         ctg = word_list[0]
         for j in range(1, len(word_list)):
@@ -69,4 +72,4 @@ if __name__ == "__main__":
     train_data_label = (train, train_label)
     test_data_label = (test, test_label)
 
-    cPickle.dump([train_data_label, test_data_label], open(pre_dir+"train_test_data.p", "wb"))
+    cPickle.dump([train_data_label, test_data_label], open(pre_dir+"train_test_with_keywords_data.p", "wb"), True)

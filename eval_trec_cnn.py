@@ -23,48 +23,48 @@ from model.utils import numpy_floatX, unzip, zipp
 
 """ used to calculate the prediction error. """
 
+
 def pred_error(f_pred, prepare_data, data, iterator, max_len, n_words, filter_h):
-    
-    """ compute the prediction error. 
+    """ compute the prediction error.
     """
     valid_err = 0
     for _, valid_index in iterator:
-                                  
         x = [data[0][t] for t in valid_index]
-        x = prepare_data(x,max_len,n_words,filter_h)
+        x = prepare_data(x, max_len, n_words, filter_h)
         preds = f_pred(x)
-        targets = np.array([data[1][t] for t in valid_index],dtype='int32')
+        targets = np.array([data[1][t] for t in valid_index], dtype='int32')
         valid_err += (preds == targets).sum()
-                
+
     valid_err = 1. - numpy_floatX(valid_err) / len(data[0])
 
     return valid_err
 
+
 """ used to preprocess the dataset. """
- 
+
+
 def prepare_data(seqs_x, max_len, n_words, filter_h):
-    
-    pad = filter_h -1
-    x = []   
-    for rev in seqs_x:    
+    pad = filter_h - 1
+    x = []
+    for rev in seqs_x:
         xx = []
         for i in xrange(pad):
             # we need pad the special <pad_zero> token.
-            xx.append(n_words-1)
+            xx.append(n_words - 1)
         for idx in rev:
             xx.append(idx)
-        while len(xx) < max_len + 2*pad:
+        while len(xx) < max_len + 2 * pad:
             # we need pad the special <pad_zero> token.
-            xx.append(n_words-1)
+            xx.append(n_words - 1)
         x.append(xx)
-    x = np.array(x,dtype='int32')
+    x = np.array(x, dtype='int32')
     return x
 
+
 def train_classifier(train, valid, test, W, n_words=10000, img_w=100, max_len=40,
-    feature_maps=100, filter_hs=[1,2,3], dropout_val=0.5, patience=10,
-    max_epochs=10, lrate=0.0002, batch_size=50, valid_batch_size=50, dispFreq=10,
-    validFreq=100, saveFreq=200, saveto = 'trec_cnn_result.npz'):
-        
+                     feature_maps=100, filter_hs=[1, 2, 3], dropout_val=0.5, patience=10,
+                     max_epochs=10, lrate=0.0002, batch_size=50, valid_batch_size=50, dispFreq=10,
+                     validFreq=100, saveFreq=200, saveto='trec_cnn_result.npz'):
     """ train, valid, test : datasets
         W : the word embedding initialization
         n_words : vocabulary size
@@ -84,8 +84,8 @@ def train_classifier(train, valid, test, W, n_words=10000, img_w=100, max_len=40
         saveto: where to save the result.
     """
 
-    img_h = max_len + 2*(filter_hs[-1]-1)
-    
+    img_h = max_len + 2 * (filter_hs[-1] - 1)
+
     options = {}
     options['n_words'] = n_words
     options['img_w'] = img_w
@@ -99,59 +99,60 @@ def train_classifier(train, valid, test, W, n_words=10000, img_w=100, max_len=40
     options['valid_batch_size'] = valid_batch_size
     options['dispFreq'] = dispFreq
     options['validFreq'] = validFreq
-    
+
     logger.info('Model options {}'.format(options))
-    
+
     logger.info('{} train examples'.format(len(train[0])))
     logger.info('{} valid examples'.format(len(valid[0])))
     logger.info('{} test examples'.format(len(test[0])))
 
     logger.info('Building model...')
-    
+
     n_y = np.max(train[1]) + 1
     options['n_y'] = n_y
-    
+
     """
     Train a simple conv net
     img_h = sentence length (padded where necessary)
     img_w = word vector length (300 for word2vec)
     filter_hs = filter window sizes    
-    """ 
+    """
 
     filter_w = img_w
     filter_shapes = []
     pool_sizes = []
     for filter_h in filter_hs:
         filter_shapes.append((feature_maps, 1, filter_h, filter_w))
-        pool_sizes.append((img_h-filter_h+1, img_w-filter_w+1))
-        
+        pool_sizes.append((img_h - filter_h + 1, img_w - filter_w + 1))
+
     options['filter_shapes'] = filter_shapes
     options['pool_sizes'] = pool_sizes
-    
-    params = init_params(options,W)
+
+    params = init_params(options, W)
     tparams = init_tparams(params)
 
-    (use_noise, x, y, f_pred_prob, f_pred, cost) = build_model(tparams,options)
-    
+    (use_noise, x, y, f_pred_prob, f_pred, cost) = build_model(tparams, options)
+
     lr = tensor.scalar(name='lr')
     f_grad_shared, f_update = Adam(tparams, cost, [x, y], lr)
 
     logger.info('Training model...')
-    
+
     kf_valid = get_minibatches_idx(len(valid[0]), valid_batch_size)
     kf_test = get_minibatches_idx(len(test[0]), valid_batch_size)
 
     estop = False  # early stop
     history_errs = []
     best_p = None
-    bad_counter = 0    
+    bad_counter = 0
     uidx = 0  # the number of update done
     start_time = time.time()
-    
+
     zero_vec_tensor = tensor.vector()
     zero_vec = np.zeros(img_w).astype(theano.config.floatX)
-    set_zero = theano.function([zero_vec_tensor], updates=[(tparams['Wemb'], tensor.set_subtensor(tparams['Wemb'][n_words-1,:], zero_vec_tensor))])
-    
+    set_zero = theano.function([zero_vec_tensor], updates=[
+        (tparams['Wemb'], tensor.set_subtensor(tparams['Wemb'][n_words - 1, :], zero_vec_tensor))])
+
     try:
         for eidx in xrange(max_epochs):
 
@@ -162,8 +163,8 @@ def train_classifier(train, valid, test, W, n_words=10000, img_w=100, max_len=40
                 use_noise.set_value(dropout_val)
 
                 y = np.array([train[1][t] for t in train_index]).astype('int32')
-                x = [train[0][t]for t in train_index]
-                x = prepare_data(x,max_len,n_words,filter_hs[-1])
+                x = [train[0][t] for t in train_index]
+                x = prepare_data(x, max_len, n_words, filter_hs[-1])
 
                 cost = f_grad_shared(x, y)
                 f_update(lrate)
@@ -176,40 +177,38 @@ def train_classifier(train, valid, test, W, n_words=10000, img_w=100, max_len=40
 
                 if np.mod(uidx, dispFreq) == 0:
                     logger.info('Epoch {} Update {} Cost {}'.format(eidx, uidx, cost))
-                    
+
                 if np.mod(uidx, saveFreq) == 0:
                     logger.info('Saving ...')
-                    
+
                     if best_p is not None:
                         params = best_p
                     else:
                         params = unzip(tparams)
                         np.savez(saveto, history_errs=history_errs, **params)
-                    
+
                     logger.info('Done ...')
 
                 if np.mod(uidx, validFreq) == 0:
-                    
-                    use_noise.set_value(0.)
-                    
-                    train_err = pred_error(f_pred, prepare_data, train, kf, max_len,n_words, filter_hs[-1])
-                    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid, max_len,n_words, filter_hs[-1])
-                    test_err = pred_error(f_pred, prepare_data, test, kf_test, max_len,n_words, filter_hs[-1])
-                    history_errs.append([valid_err, test_err, train_err])
-                   
-                    if (uidx == 0 or
-                        valid_err <= np.array(history_errs)[:,0].min()):
 
+                    use_noise.set_value(0.)
+
+                    train_err = pred_error(f_pred, prepare_data, train, kf, max_len, n_words, filter_hs[-1])
+                    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid, max_len, n_words, filter_hs[-1])
+                    test_err = pred_error(f_pred, prepare_data, test, kf_test, max_len, n_words, filter_hs[-1])
+                    history_errs.append([valid_err, test_err, train_err])
+
+                    if (uidx == 0 or
+                                valid_err <= np.array(history_errs)[:, 0].min()):
                         best_p = unzip(tparams)
                         bad_counter = 0
 
                     logger.info('Train {} Valid {} Test {}'.format(train_err, valid_err, test_err))
 
                     if (len(history_errs) > patience and
-                        valid_err >= np.array(history_errs)[:-patience,0].min()):
+                                valid_err >= np.array(history_errs)[:-patience, 0].min()):
                         bad_counter += 1
                         if bad_counter > patience:
-                            
                             logger.info('Early Stop!')
                             estop = True
                             break
@@ -225,27 +224,27 @@ def train_classifier(train, valid, test, W, n_words=10000, img_w=100, max_len=40
         zipp(best_p, tparams)
     else:
         best_p = unzip(tparams)
-    
+
     use_noise.set_value(0.)
-    
+
     kf_train_sorted = get_minibatches_idx(len(train[0]), batch_size)
-    train_err = pred_error(f_pred, prepare_data, train, kf_train_sorted, max_len,n_words, filter_hs[-1])
-    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid, max_len,n_words, filter_hs[-1])
-    test_err = pred_error(f_pred, prepare_data, test, kf_test, max_len,n_words, filter_hs[-1])
+    train_err = pred_error(f_pred, prepare_data, train, kf_train_sorted, max_len, n_words, filter_hs[-1])
+    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid, max_len, n_words, filter_hs[-1])
+    test_err = pred_error(f_pred, prepare_data, test, kf_test, max_len, n_words, filter_hs[-1])
 
     logger.info('Train {} Valid {} Test {}'.format(train_err, valid_err, test_err))
-    
+
     np.savez(saveto, train_err=train_err,
              valid_err=valid_err, test_err=test_err,
              history_errs=history_errs, **best_p)
-    
-    logger.info('The code run for {} epochs, with {} sec/epochs'.format(eidx + 1, 
-                 (end_time - start_time) / (1. * (eidx + 1))))
-    
+
+    logger.info('The code run for {} epochs, with {} sec/epochs'.format(eidx + 1,
+                                                                        (end_time - start_time) / (1. * (eidx + 1))))
+
     return train_err, valid_err, test_err
 
-def create_valid(train_set,valid_portion=0.10):
-    
+
+def create_valid(train_set, valid_portion=0.10):
     # split training set into validation set
     train_set_x, train_set_y = train_set
     n_samples = len(train_set_x)
@@ -261,8 +260,9 @@ def create_valid(train_set,valid_portion=0.10):
 
     return train, valid
 
+
 if __name__ == '__main__':
-    
+
     # https://docs.python.org/2/howto/logging-cookbook.html
     logger = logging.getLogger('eval_trec_cnn')
     logger.setLevel(logging.INFO)
@@ -274,14 +274,14 @@ if __name__ == '__main__':
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)
     logger.addHandler(fh)
-    
+
     logger.info('loading data...')
     pre_dir = "/home/zhang/PycharmProjects/sentence_classify_zhang/data_file_2017/"
-    train_test_data_dir = pre_dir + "train_test_data.p"
-    wordtoix_and_ixtoword_dir = pre_dir + "wordtoix_and_ixtoword.p"
-    word_vec_dict_dir = pre_dir + "word_vec_dict.p"
+    train_test_with_keywords_data_dir = pre_dir + "train_test_with_keywords_data.p"
+    wordtoix_and_ixtoword_dir = pre_dir + "wordtoix_and_ixtoword_true.p"
+    word_vec_dict_dir = pre_dir + "word_vec_dict_true.p"
 
-    train_test_data = cPickle.load(open(train_test_data_dir, "rb"))
+    train_test_data = cPickle.load(open(train_test_with_keywords_data_dir, "rb"))
     wordtoix_and_ixtoword = cPickle.load(open(wordtoix_and_ixtoword_dir, "rb"))
     word_vec_dict = cPickle.load(open(word_vec_dict_dir, "rb"))
 
@@ -293,35 +293,34 @@ if __name__ == '__main__':
     # train, test, W, ixtoword, wordtoix= x[0], x[1], x[2], x[3], x[4]
     # del x
     del train_test_data, wordtoix_and_ixtoword, word_vec_dict
-    
+
     n_words = W.shape[0]
-    
+
     length = []
     for sent in train[0]:
         length.append(len(sent))
-    
+
     for sent in test[0]:
         length.append(len(sent))
-    
+
     max_len = np.max(length) + 1
-    
+
     n_words = len(ixtoword)
     # add another special token called <pad_zero>
     ixtoword[n_words] = '<pad_zero>'
     wordtoix['<pad_zero>'] = n_words
     n_words = n_words + 1
     Wemb = np.zeros((n_words, 100))
-    Wemb[:n_words-1] = W
+    Wemb[:n_words - 1] = W
     del W
-    
+
     results = []
     # run the cnn classifier ten times
     r = range(0, 1)
     for i in r:
         train0, valid = create_valid(train, valid_portion=0.10)
-        [train_err, valid_err, test_err] = train_classifier(train0, valid, test, 
-            Wemb, n_words=n_words, max_len=max_len)
+        [train_err, valid_err, test_err] = train_classifier(train0, valid, test,
+                                                            Wemb, n_words=n_words, max_len=max_len)
         logger.info('try: {} test err: {}'.format(i, test_err))
         results.append(test_err)
-    logger.info('final test err: {} std: {}'.format(np.mean(results),np.std(results)))   
-
+    logger.info('final test err: {} std: {}'.format(np.mean(results), np.std(results)))
