@@ -28,7 +28,7 @@ word_vec = word_vec_dict[0]
 
 print time.asctime(time.localtime(time.time()))
 
-# print word_flag[u'全州县'.encode('utf-8')] # 词ci-词ci词词词词词词性对照表 unicode编码
+# print word_flag[u'全州县'.encode('utf-8')] # 词ci-词ci词性对照表 unicode编码
 # print wordtoix[u'全州县'.encode("utf-8")]
 # for i in range(10000):
 #     print ixtoword[i]

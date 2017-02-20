@@ -83,8 +83,6 @@ def function_relating(V_title, W, word_id):
     for id in V_title:
         arrA = W[word_id]
         arrB = W[id]
-        arrA = np.asarray(W[Vi])
-        arrB = np.asarray(W[Vj])
         cosine_dist = CosineDist(arrA, arrB)
         if cosine_dist > max_relating:
             max_relating = cosine_dist
