@@ -43,7 +43,7 @@ if __name__ == "__main__":
     print "程序加载数据完毕时间：" + time.asctime(time.localtime(time.time()))
 
     num_of_all_news = len(all_news_content_by_id)
-    for index_of_news in range(1):  # num_of_all_news
+    for index_of_news in range(1,2):  # num_of_all_news
         one_news_by_id = all_news_content_by_id[index_of_news]
         one_news_by_id_word_set = set(one_news_by_id)
         one_news_by_id_word_set_to_list = list(one_news_by_id_word_set)
@@ -97,7 +97,7 @@ if __name__ == "__main__":
             else:
                 cluster_coe = 0.0001
 
-            Weight_of_CN[one_news_by_id_word_set_to_list[i]] = cluster_coe * freq_i * NeiContribution
+            Weight_of_CN[one_news_by_id_word_set_to_list[i]] = freq_i * NeiContribution
 
         Weight_of_CN = sorted(Weight_of_CN.iteritems(), key=lambda d: d[1], reverse=True)
         for i in range(len(Weight_of_CN)):

@@ -61,7 +61,7 @@ if __name__ == "__main__":
                     "health": 6807, "car": 7409}
     print time.asctime(time.localtime(time.time()))
 
-    for index in range(1):  # len(all_news_content_by_id)
+    for index in range(1, 2):  # len(all_news_content_by_id)
         n = len(all_news_content_by_id[index])
         news_word_set = set(all_news_content_by_id[index])
         category = news_title_category[index].split()[0]
@@ -80,7 +80,7 @@ if __name__ == "__main__":
         features = []
         count = 0
         for i in range(len(word_crf)):
-            # print word_crf[i][0] + ":" + str(word_crf[i][1])
+            print word_crf[i][0] + ":" + str(word_crf[i][1])
             features.append(word_crf[i][0])
             count += 1
             if count > 20:
