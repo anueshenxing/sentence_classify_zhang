@@ -15,7 +15,7 @@ class WeightCompute(object):
         self.sum_all_news = 84958
         self.sum_category = {"society": 8764, "edu": 9223, "sports": 6991, "travel": 7887,
                              "military": 5180, "finance": 9470, "tech": 8959, "food": 7554,
-                             "health": 6807, "car": 7409}
+                             "health": 6807, "car": 7409, "entertainment": 6714}
 
     def compute_tfidf(self, news_index, tf_idf):
         """
